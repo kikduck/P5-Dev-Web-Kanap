@@ -40,6 +40,47 @@ const getColor = () => {
 
 const addToCartBtn = document.getElementById("addToCart");
 
+function addCart(productId, varQuantity, varColor) {
+    // Vérifie que le navigateur prend en charge le stockage local
+    if (typeof (Storage) !== "undefined") {
+        var varNewItem = true;
+        // Récupère les éléments existants du stockage local
+        var existingItemsString = localStorage.getItem("cartItems");
+        var existingItems = JSON.parse(existingItemsString) || [];
+        // Crée un objet pour stocker les variables
+        var newItem = {
+            productId: productId,
+            varQuantity: varQuantity,
+            varColor: varColor
+        };
+        for (let item of existingItems) {
+            if (item.productId == productId && item.varColor == varColor) {
+                console.log("MEME ITEM");
+                var newItem = {
+                    productId: productId,
+                    varQuantity: varQuantity + item.varQuantity,
+                    varColor: varColor
+                };
+                var varNewItem = false
+                let index = existingItems.findIndex(element => element === item);
+                existingItems[index] = newItem;
+            }
+        }
+        console.log(varNewItem);
+        if (varNewItem === true) {
+            // Ajoute l'objet aux éléments existants
+            existingItems.push(newItem);
+        }
+        // Convertit l'objet en chaîne de caractères pour le stocker
+        var itemsString = JSON.stringify(existingItems);
+        // Stocke les variables dans le stockage local
+        localStorage.setItem("cartItems", itemsString);
+    } else {
+        console.log("Désolé, votre navigateur ne prend pas en charge le stockage local.");
+    }
+}
+
+
 addToCartBtn.addEventListener("click", () => {
     const varQuantity = parseInt(getQuantity());
     const varColor = getColor();
@@ -51,8 +92,9 @@ addToCartBtn.addEventListener("click", () => {
         }
     } else if (varColor == "") {
         alert("Aucune couleur sélectionnée");
+    } else {
+        addCart(productId, varQuantity, varColor);
+        window.location.assign("cart.html");
     };
 
-    //addCart(productId, varColor, varQuantity);
-    // window.location.assign("cart.html");
 });
