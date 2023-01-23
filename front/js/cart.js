@@ -12,7 +12,7 @@ function getCartItems() {
 };
 
 //Récupère les détails de chaque élément dans l'API
-async function dataFetch(items) {
+async function getProductById(items) {
     productIdList = [];
     for (let item of items) {
         productIdList.push(item.productId);
@@ -26,14 +26,14 @@ async function dataFetch(items) {
         }
         await fetch(HOST)
             .then(response => response.json())
-            .then(data => constructDom(data, Color, Quantity))
+            .then(data => constructCartPage(data, Color, Quantity))
             .catch(error => console.log(error));
     };
     getTotalPrice();
 };
 
 //Constuction de la page
-function constructDom(data, Color, Quantity) {
+function constructCartPage(data, Color, Quantity) {
     const productSection = document.getElementById("cart__items");
     const itemCart = `
     <article class="cart__item" data-id="${data._id}" data-color="${Color}">
@@ -62,7 +62,7 @@ function constructDom(data, Color, Quantity) {
 };
 
 getCartItems();
-dataFetch(items);
+getProductById(items);
 
 
 //Affiche le prix total
@@ -95,7 +95,7 @@ function deleteItem(deletedItemId, deletedItemColor) {
 function quantityChange(ItemId, ItemColor, ItemQuantity) {
     for (let item of items) {
         if (item.productId == ItemId && item.varColor == ItemColor) {
-            if (Number.isInteger(parseInt(ItemQuantity))) {
+            if (Number.isInteger(parseInt(ItemQuantity)) && parseInt(ItemQuantity) > 0) {
                 var newItem = {
                     productId: item.productId,
                     varQuantity: ItemQuantity,
@@ -171,17 +171,22 @@ async function Confirmation() {
     console.log(productIdList)
     console.log(JSON.stringify({ contact, productIdList }))
     products = productIdList;
-    let response = await fetch('http://localhost:3000/api/products/order', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=utf-8'
-        },
-        body: JSON.stringify({ contact, products })
-    });
-    let data = await response.json();
-    localStorage.clear();
-    let confirmationUrl = "./confirmation.html?id=" + data.orderId;
-    window.location.assign(confirmationUrl);
+    if (products.length === 0) {
+        alert("Panier Vide");
+    } else {
+        let response = await fetch('http://localhost:3000/api/products/order', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify({ contact, products })
+        });
+        let data = await response.json();
+        localStorage.clear();
+        let confirmationUrl = "./confirmation.html?id=" + data.orderId;
+        window.location.assign(confirmationUrl);
+    }
+
 }
 
 
