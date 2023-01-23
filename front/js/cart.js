@@ -134,7 +134,8 @@ submitButton.addEventListener("click", (event) => {
     for (let input of inputBox) {
         let onlySpaces = input.value.trim().length === 0;
         let onlyLetters = /^[a-zA-Z]+$/.test(input.value);
-        let containsAt = input.value.search(/@/) !== -1;
+        var emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let emailTest = emailRegex.test(input.value);
         let index = inputBox.findIndex(element => element === input);
         if (onlySpaces) {
             ErrorMsg[index].innerHTML = `Champ vide`;
@@ -142,7 +143,15 @@ submitButton.addEventListener("click", (event) => {
         } else {
             if (onlyLetters || input == address || input == email) {
                 ErrorMsg[index].innerHTML = ``;
-                if (input == email && containsAt === false) {
+                if ((input == firstName || input == lastName) && input.value.length < 2) {
+                    ErrorMsg[index].innerHTML = `Champ Invalide`;
+                    varConfirmaton = false;
+                }
+                if (input == address && input.value.length < 7) {
+                    ErrorMsg[index].innerHTML = `Adresse invalide`;
+                    varConfirmaton = false;
+                }
+                if (input == email && emailTest === false) {
                     ErrorMsg[index].innerHTML = `Email invalide`;
                     varConfirmaton = false;
                 }
