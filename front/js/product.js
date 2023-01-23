@@ -90,11 +90,11 @@ function addCart(productId, varQuantity, varColor) {
 addToCartBtn.addEventListener("click", () => {
     const varQuantity = parseInt(getQuantity());
     const varColor = getColor();
-    if (varQuantity == 0) {
+    if (varQuantity <= 0 || Number.isInteger(parseInt(varQuantity)) === false) {
         if (varColor == "") {
-            alert("Quantité nulle et aucune couleur sélectionnée");
+            alert("Quantité invalide et aucune couleur sélectionnée");
         } else {
-            alert("Quantité nulle");
+            alert("Quantité invalide");
         }
     } else if (varColor == "") {
         alert("Aucune couleur sélectionnée");
