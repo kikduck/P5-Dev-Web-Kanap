@@ -38,6 +38,8 @@ const getColor = () => {
     return color.value;
 };
 
+
+
 const addToCartBtn = document.getElementById("addToCart");
 
 function addCart(productId, varQuantity, varColor) {
@@ -46,12 +48,16 @@ function addCart(productId, varQuantity, varColor) {
         var varNewItem = true;
         // Récupère les éléments existants du stockage local
         var existingItemsString = localStorage.getItem("cartItems");
-        var existingItems = JSON.parse(existingItemsString) || [];
+        if (existingItemsString == "") {
+            var existingItems = [];
+        } else {
+            var existingItems = JSON.parse(existingItemsString) || [];
+        }
         // Crée un objet pour stocker les variables
         var newItem = {
             productId: productId,
             varQuantity: varQuantity,
-            varColor: varColor
+            varColor: varColor,
         };
         for (let item of existingItems) {
             if (item.productId == productId && item.varColor == varColor) {
@@ -59,7 +65,7 @@ function addCart(productId, varQuantity, varColor) {
                 var newItem = {
                     productId: productId,
                     varQuantity: varQuantity + item.varQuantity,
-                    varColor: varColor
+                    varColor: varColor,
                 };
                 var varNewItem = false
                 let index = existingItems.findIndex(element => element === item);
