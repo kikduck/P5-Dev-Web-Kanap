@@ -3,12 +3,14 @@ const urlParams = new URL(currentUrl);
 const productId = urlParams.searchParams.get("id");
 const HOST = "http://localhost:3000/api/products/" + productId;
 
+//Récupérer les données
 const dataFetch = async function () {
     const response = await fetch(HOST);
     const data = await response.json();
     constructDom(data);
 };
 
+//Constuction de la page
 const constructDom = function (data) {
     const image = document.querySelector(".item__img");
     image.innerHTML = `<img src="${data.imageUrl}" alt="${data.altTxt}">`;
@@ -28,20 +30,7 @@ const constructDom = function (data) {
 
 dataFetch();
 
-const getQuantity = () => {
-    const quantity = document.getElementById("quantity");
-    return quantity.value;
-};
-
-const getColor = () => {
-    const color = document.getElementById("colors");
-    return color.value;
-};
-
-
-
-const addToCartBtn = document.getElementById("addToCart");
-
+//Ajouter le produit au panier
 function addCart(productId, varQuantity, varColor) {
     // Vérifie que le navigateur prend en charge le stockage local
     if (typeof (Storage) !== "undefined") {
@@ -86,7 +75,19 @@ function addCart(productId, varQuantity, varColor) {
     }
 }
 
+const getQuantity = () => {
+    const quantity = document.getElementById("quantity");
+    return quantity.value;
+};
 
+const getColor = () => {
+    const color = document.getElementById("colors");
+    return color.value;
+};
+
+const addToCartBtn = document.getElementById("addToCart");
+
+//Evenement clic bouton ajouter au panier, vérification des inputs
 addToCartBtn.addEventListener("click", () => {
     const varQuantity = parseInt(getQuantity());
     const varColor = getColor();

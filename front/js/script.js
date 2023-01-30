@@ -1,5 +1,6 @@
 const HOST = "http://localhost:3000/api/products";
 
+//Récupérer les donnnées et affichage des produits
 async function dataFetch() {
   try {
     const response = await fetch(HOST);
