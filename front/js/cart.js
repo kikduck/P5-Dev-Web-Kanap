@@ -152,7 +152,7 @@ submitButton.addEventListener("click", (event) => {
                     varConfirmaton = false;
                 }
                 if (input == email && emailTest === false) {
-                    ErrorMsg[index].innerHTML = `Email invalide`;
+                    ErrorMsg[index].innerHTML = `Email invalide. Veuillez mettre un format du type : example@example.fr`;
                     varConfirmaton = false;
                 }
             } else {
