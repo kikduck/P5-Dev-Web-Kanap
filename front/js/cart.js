@@ -68,14 +68,18 @@ getProductById(items);
 //Affiche le prix total
 async function getTotalPrice() {
     totalPrice = 0;
+    totalQuantity = 0;
     const totalPriceSection = document.getElementById("totalPrice");
+    const totalItemSection = document.getElementById("totalQuantity");
     for (let item of items) {
         await fetch("http://localhost:3000/api/products/" + item.productId)
             .then(response => response.json())
             .then(data => totalPrice = totalPrice + data.price * item.varQuantity)
             .catch(error => console.log(error));
+        totalQuantity = totalQuantity + parseInt(item.varQuantity);
     }
     totalPriceSection.innerHTML = `${totalPrice}`;
+    totalItemSection.innerHTML = `${totalQuantity}`;
 }
 
 //Supprime un élément de la page et du localstorage
